@@ -1,0 +1,5 @@
+{
+	"netflix": "nflx://",
+	"classy fireplace": "intent:#Intent;component=com.netflix.mediaclient/.Main;end",
+	"pandora": "pandora://"
+}
