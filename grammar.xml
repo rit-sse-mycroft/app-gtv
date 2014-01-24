@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://www.w3.org/2001/06/grammar" xml:lang="en-US" root="question" tag-format="semantics/1.0" version="1.0">
+    <rule id="mycroft" scope="private">
+        <item>Mycroft</item>
+    </rule>
+    <rule id="launch" scope="private">
+        <one-of>
+            <item>launch</item>
+            <item>start</item>
+            <item>run</item>
+            <item>open</item>
+        </one-of>
+    </rule>
+    <rule id="app">
+        <one-of>
+            <item>Pandora</item>
+            <item>Netflix</item>
+            <item>Classy Fireplace</item>
+            <item>Events</item>
+            <item>Calendar</item>
+            <item>Dashboard</item>
+            <item>Web Interface</item>
+        </one-of>
+    </rule>
+    <rule id="question" scope="public">
+        <ruleref uri="#mycroft" />
+        <ruleref uri="#launch" />
+        <ruleref uri="#app" />
+        <tag>out.app=rules.app</tag>
+    </rule>
+</grammar>

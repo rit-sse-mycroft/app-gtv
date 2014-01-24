@@ -1,10 +1,12 @@
 {
     "version": "0.0.1",
     "name": "gtv",
-    "displayName": "Google TV Controller",
+    "displayName": "GoogleTVController",
     "instanceId": "google-tv-remote",
-    "capabilities": {},
-    "API": "0",
+    "capabilities": {
+        "gtving": "0.0.1"
+    },
+    "API": 0,
     "description": "Launches applications on the Google TV",
     "dependencies": {
         "stt": "0.0.1",

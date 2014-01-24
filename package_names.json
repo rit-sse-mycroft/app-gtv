@@ -1,5 +1,9 @@
 {
 	"netflix": "nflx://",
-	"classy fireplace": "intent:#Intent;component=com.netflix.mediaclient/.Main;end",
-	"pandora": "pandora://"
+	"classy fireplace": "intent:#Intent;component=net.tyx.classyfireplace/.Main;end",
+	"pandora": "pandora://",
+	"events": "http://sse.se.rit.edu/events/gtv",
+	"calendar": "http://sse.se.rit.edu/events/gtv",
+	"dashboard": "http://sse.se.rit.edu/events/gtv",
+	"web interface": "http://sse.se.rit.edu/events/gtv",
 }
