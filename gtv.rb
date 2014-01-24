@@ -30,16 +30,23 @@ class Gtv < Mycroft::Client
       # Get the app from the broadcast
       app = data[:data]["content"]["tags"]["app"].downcase
       
-      # Make sure we recognize the command.
-      unless @gtv_packages.has_key?(app)
-        return
-      end
-      
-      # Send the appropriate intent to the GTV
-      GTVRemote::fling(@gtv_packages[app])
+      open_app(app)
 
     elsif data[:type] == 'MSG_QUERY'
-      # Do stuff
+      puts data[:data]["action"]
+      if data[:data]["action"].downcase == "app"
+        #TODO: Validate Query
+        app = data[:data]["data"]["app"].downcase
+        puts app
+        open_app(app)
+      elsif data[:data]["action"].downcase == "url"
+        #TODO: Validate Query
+        url = data[:data]["data"]["url"]
+        if (not url.downcase.include?("http")) # Make sure URL has http:// in front
+          url = "http://" + url
+        end
+        GTVRemote::open_uri(url)
+      end
     elsif data[:type] == 'APP_MANIFEST_OK'
       # Do stuff
       grammar = File.read("./grammar.xml")
@@ -58,6 +65,16 @@ class Gtv < Mycroft::Client
 
   def on_end
     GTVRemote::close()
+  end
+
+  def open_app(app)
+      # Make sure we recognize the command.
+      unless @gtv_packages.has_key?(app)
+        return
+      end
+      
+      # Send the appropriate intent to the GTV
+      GTVRemote::fling(@gtv_packages[app])
   end
 end
 
