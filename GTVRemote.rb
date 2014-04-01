@@ -5,7 +5,7 @@ require 'google_anymote'
 module GTVRemote
 
   def pair
-    @gtv_cert = File.read('certs/cert.pem').chomp
+    @gtv_cert = File.read(@config['cert'] || 'certs/cert.pem')
     @host = "ssegoogletv.rit.edu"
     @gtv = GoogleAnymote::TV.new(@gtv_cert, @host)
   end

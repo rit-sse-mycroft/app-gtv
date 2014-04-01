@@ -1,7 +1,35 @@
 # GTV
 
-## Running this app
-For information on how to pair your machine to the Google TV (Required to run this application) check out the readme for [this Ruby gem](https://github.com/rnhurt/google_anymote/blob/master/README.md).
+## Setup
+Before using the app, you must have an OpenSSL certificate. This certificate can be
+self signed and that's pretty easy to do. Assuming you have `openssl` on your path you
+can run the following.
+
+```
+$ openssl genrsa -des3 -out server.key 1024
+$ openssl req -new -key server.key -out server.csr
+$ openssl rsa -in server.key -out server.key
+$ openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+$ cat server.key server.crt > cert.pem
+```
+
+By default, the application looks for a file `certs/cert.pem` relative to the
+current directory. If you would like to put it somewhere else, you can create a `config.yml`
+file with the following:
+
+```yaml
+cert: path/to/cert.pem
+```
+
+## Pairing
+Before running the application for the first time, you need to pair your device with the GTV.
+you can do this by running the following:
+
+```
+bundle exec pair gtv ssegoogletv.rit.edu path/to/cert.pem
+```
+
+After this, you should have no problem running the app.
 
 ## Querying
 There are two types of querys that an app can do:

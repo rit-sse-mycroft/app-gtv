@@ -9,6 +9,8 @@ class GTV < Mycroft::Client
   def initialize(host, port)
     @key = ''
     @cert = ''
+    @config = File.read('config.yml') if File.exists?('config.yml')
+    @config ||= {}
     @manifest = './app.json'
     @verified = false
     @sent_grammar = false
