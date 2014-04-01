@@ -4,10 +4,9 @@ require 'google_anymote'
 
 module GTVRemote
 
-  @gtv_cert = File.read(File.join(File.dirname(__FILE__),"certs/cert.pem"))
-  @host = "ssegoogletv.rit.edu"
-
   def pair
+    @gtv_cert = File.read('certs/cert.pem').chomp
+    @host = "ssegoogletv.rit.edu"
     @gtv = GoogleAnymote::TV.new(@gtv_cert, @host)
   end
 
