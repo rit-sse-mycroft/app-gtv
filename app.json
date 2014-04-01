@@ -7,9 +7,8 @@
         "gtv": "0.0.1"
     },
     "API": 0,
-    "description": "Launches applications on the Google TV",
+    "description": "Sends commands to the Google TV",
     "dependencies": {
-        "stt": "0.0.1",
-        "logger": "1.0.0"
+        "stt": "0.0.1"
     }
 }

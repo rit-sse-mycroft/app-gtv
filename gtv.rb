@@ -8,27 +8,37 @@ class Gtv < Mycroft::Client
   attr_accessor :verified
 
   def initialize(host, port)
-    @key = '/path/to/key'
-    @cert = '/path/to/cert'
+    @key = ''
+    @cert = ''
     @manifest = './app.json'
     @verified = false
+    @sent_grammar = false
     @gtv_packages = JSON.parse(File.read("package_names.json"))
+    GTVRemote::open
     super
   end
 
-  on 'connect' do
-    GTVRemote::open
+  on 'APP_DEPENDENCY' do |data|
+    update_dependencies(data)
+    if not @dependencies['stt'].nil?
+      if @dependencies['stt']['stt1'] == 'up' and not @sent_grammar
+        up
+        data = {grammar: { name: 'Google TV', xml: File.read('./grammar.xml')}}
+        query('stt', 'load_grammar', data)
+        @sent_grammar = true
+      elsif @dependencies['stt']['stt1'] == 'down' and @sent_grammar
+        @sent_grammar = false
+        down
+      end
+    end
   end
 
   on 'MSG_BROADCAST' do |data|
-    unless (data["content"].has_key?("grammar") and data["content"]["grammar"] == "Google TV")
-      puts "Grammar isn't being matched oops"
-      return
+    if (data["content"]["grammar"] == "Google TV")
+      # Get the app from the broadcast
+      app = data["content"]["tags"]["app"].downcase
+      open_app(app)
     end
-    # Get the app from the broadcast
-    app = data["content"]["tags"]["app"].downcase
-    
-    open_app(app)
   end
 
   on 'MSG_QUERY' do |data|
@@ -59,7 +69,7 @@ class Gtv < Mycroft::Client
     query("stt", "load_grammar", data)
   end
 
-  on 'end' do 
+  on 'CONNECTION_CLOSED' do
     GTVRemote::close
     query('stt', 'unload_grammar', {grammar: 'Google TV'})
   end
@@ -69,7 +79,7 @@ class Gtv < Mycroft::Client
     unless @gtv_packages.has_key?(app)
       return
     end
-    
+
     # Send the appropriate intent to the GTV
     GTVRemote::fling(@gtv_packages[app])
   end
