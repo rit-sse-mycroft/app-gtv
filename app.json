@@ -9,6 +9,5 @@
     "API": 0,
     "description": "Sends commands to the Google TV",
     "dependencies": {
-        "stt": "0.0.1"
     }
 }
