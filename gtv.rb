@@ -21,7 +21,7 @@ class GTV < Mycroft::Client
   end
 
   on 'MSG_QUERY' do |data|
-    if data['action'] == 'keycode'
+    if data['action'] == 'send_keycode'
       send_keycode(data['data']['keycode'])
     elsif data['action'] == 'fling'
       fling(data['data']['uri'])
