@@ -4,33 +4,23 @@ require 'google_anymote'
 
 module GTVRemote
 
-  extend self
-  @@cert = File.read(File.join(File.dirname(__FILE__),"certs/cert.pem"))
-  @@host = "ssegoogletv.rit.edu"
+  @gtv_cert = File.read(File.join(File.dirname(__FILE__),"certs/cert.pem"))
+  @host = "ssegoogletv.rit.edu"
 
   def open
-    @@gtv = GoogleAnymote::TV.new(@@cert, @@host)
+    @gtv = GoogleAnymote::TV.new(@gtv_cert, @host)
   end
 
   def close
-    @@gtv = nil
+    @gtv = nil
   end
 
-  def power_on
-    @@gtv.send_keycode(Code.values[:KEYCODE_CALL])
+  def fling(uri)
+    @gtv.fling_uri(uri)
   end
 
-  def power_off
-    @@gtv.send_keycode(Code.values[:KEYCODE_CALL])
-    @@gtv.send_keycode(Code.values[:KEYCODE_POWER])
+  def send_keycode(k)
+    @gtv.send_keycode(Code.values[k.to_sym]) unless Code.values[k.to_sym].nil?
   end
 
-  def open_uri(uri)
-    @@gtv.fling_uri("about:blank")
-    @@gtv.fling_uri(uri)
-  end
-
-  def fling(data)
-    @@gtv.fling_uri(data)
-  end
 end

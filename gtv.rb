@@ -4,8 +4,7 @@ require 'json'
 require_relative "GTVRemote"
 
 class Gtv < Mycroft::Client
-
-  attr_accessor :verified
+  include GTVRemote
 
   def initialize(host, port)
     @key = ''
@@ -19,26 +18,7 @@ class Gtv < Mycroft::Client
   end
 
   on 'APP_DEPENDENCY' do |data|
-    update_dependencies(data)
-    if not @dependencies['stt'].nil?
-      if @dependencies['stt']['stt1'] == 'up' and not @sent_grammar
-        up
-        data = {grammar: { name: 'Google TV', xml: File.read('./grammar.xml')}}
-        query('stt', 'load_grammar', data)
-        @sent_grammar = true
-      elsif @dependencies['stt']['stt1'] == 'down' and @sent_grammar
-        @sent_grammar = false
-        down
-      end
-    end
-  end
-
-  on 'MSG_BROADCAST' do |data|
-    if (data["content"]["grammar"] == "Google TV")
-      # Get the app from the broadcast
-      app = data["content"]["tags"]["app"].downcase
-      open_app(app)
-    end
+    up
   end
 
   on 'MSG_QUERY' do |data|
@@ -58,20 +38,8 @@ class Gtv < Mycroft::Client
     end
   end
 
-  on 'APP_MANIFEST_OK' do |data|
-    grammar = File.read("./grammar.xml")
-    data = {
-      "grammar"=> {
-        "name"=> "Google TV",
-        "xml"=> grammar
-      }
-    }
-    query("stt", "load_grammar", data)
-  end
-
   on 'CONNECTION_CLOSED' do
     GTVRemote::close
-    query('stt', 'unload_grammar', {grammar: 'Google TV'})
   end
 
   def open_app(app)
