@@ -39,4 +39,4 @@ class GTV < Mycroft::Client
   end
 end
 
-Mycroft.start(GTV)
+Mycroft.start(GTV, ARGV[0], ARGV[1])
